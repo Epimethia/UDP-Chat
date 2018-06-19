@@ -81,7 +81,7 @@ bool CClient::Initialise() {
 	m_pClientSocket = new CSocket();
 
 	//Getting and binding the client port number
-	unsigned short _usClientPort = QueryPortNumber(DEFAULT_CLIENT_PORT);
+	unsigned short _usClientPort = DEFAULT_CLIENT_PORT;
 	if (!m_pClientSocket->Initialise(_usClientPort)) {
 		return false;
 	}
@@ -129,22 +129,11 @@ bool CClient::Initialise() {
 			}
 			case 'M':
 			{
-				std::cout << "Enter server IP or empty for localhost: ";
-
 				gets_s(_cServerIPAddress);
 				if (_cServerIPAddress[0] == 0) {
 					strcpy_s(_cServerIPAddress, "127.0.0.1");
 				}
-				//Get the Port Number of the server
-				std::cout << "Enter server's port number or empty for default server port: ";
-				gets_s(_cServerPort);
-				//std::cin >> _usServerPort;
-
-				if (_cServerPort[0] == 0) {
-					_usServerPort = DEFAULT_SERVER_PORT;
-				} else {
-					_usServerPort = atoi(_cServerPort);
-				}
+				_usServerPort = DEFAULT_SERVER_PORT;
 				//Fill in the details of the server's socket address structure.
 				//This will be used when stamping address on outgoing packets
 				m_ServerSocketAddress.sin_family = AF_INET;
@@ -302,7 +291,7 @@ void CClient::ReceiveData(char* _pcBufferToReceiveData) {
 			//Error in receiving data 
 			std::cout << "recvfrom failed with error " << WSAGetLastError();
 			//WSACONNECTIONRESET
-			_pcBufferToReceiveData = 0;
+			_pcBufferToReceiveData = 0; 
 		} else if (_iNumOfBytesReceived == 0) {
 			//The remote end has shutdown the connection
 			_pcBufferToReceiveData = 0;
@@ -362,6 +351,7 @@ void CClient::ProcessData(char* _pcDataReceived) {
 			TPacket KeepAlive;
 			KeepAlive.Serialize(KEEPALIVE, "KeepAlive");
 			SendData(KeepAlive.PacketData);
+			break;
 		}
 		default:break;
 

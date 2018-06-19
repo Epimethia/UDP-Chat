@@ -55,7 +55,7 @@ bool CServer::Initialise() {
 	m_pServerSocket = new CSocket();
 
 	//Get the port number to bind the socket to
-	unsigned short _usServerPort = QueryPortNumber(DEFAULT_SERVER_PORT);
+	unsigned short _usServerPort = DEFAULT_SERVER_PORT;
 
 	//Initialise the socket to the local loop back address and port number
 	if (!m_pServerSocket->Initialise(_usServerPort)) {
@@ -132,7 +132,7 @@ bool CServer::SendData(char* _pcDataToSend) {
 	);
 //iNumBytes;
 	if (_iBytesToSend != iNumBytes) {
-		std::cout << "There was an error in sending data from client to server" << std::endl;
+		std::cout << "There was an error in sending data from Server to Client" << std::endl;
 		return false;
 	}
 	return true;
@@ -197,8 +197,6 @@ void CServer::ProcessData(char* _pcDataReceived) {
 	switch (_packetRecvd.MessageType) {
 		case HANDSHAKE: {
 			//Keep Alive Message
-
-			//Qs 3: To DO : Add the code to do a handshake here
 			std::cout << "Server received a handshake message.\n";
 			if (_pcDataReceived == "Keep Alive") {
 				std::cout << "Keep Alive Packet\n";
@@ -315,7 +313,7 @@ void CServer::ProcessData(char* _pcDataReceived) {
 		case BROADCAST: {
 			std::cout << "Received a broadcast packet" << std::endl;
 			//Just send out a packet to the back to the client again which will have the server's IP and port in it's sender fields
-			_packetToSend.Serialize(BROADCAST, "I'm here!");
+			_packetToSend.Serialize(DATA, "I'm here!");
 			SendData(_packetToSend.PacketData);
 			break;
 		}
