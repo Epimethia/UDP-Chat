@@ -159,7 +159,15 @@ void CServer::ReceiveData(char* _pcBufferToReceiveData) {
 		);
 		if (_iNumOfBytesReceived < 0) {
 			int _iError = WSAGetLastError();
-			ErrorRoutines::PrintWSAErrorInfo(_iError);
+			if (_iError == WSAECONNRESET) {
+				auto bit = m_pConnectedClients->end();
+				auto it = m_pConnectedClients->find(ToString(m_ClientAddress));
+				std::cout << "User " << it->first << " removed from client list.";
+				if (it != m_pConnectedClients->end()) {
+					m_pConnectedClients->erase(it);
+				}
+				
+			}
 			//return false;
 		} else {
 			_iPacketSize = static_cast<int>(strlen(_buffer)) + 1;
@@ -224,6 +232,11 @@ void CServer::ProcessData(char* _pcDataReceived) {
 			std::cout << "User " << _pcDataReceived << " joined successfully.\n";
 			//Sending a special message to the client that just joined, containing
 			//the user list
+
+			Message = "Why hello there";
+			_packetToSend.Serialize(HANDSHAKE, const_cast<char*>(Message.c_str()));
+			SendData(_packetToSend.PacketData);
+
 			std::string UserName(_pcDataReceived);
 			UserName.erase(0, 2);
 			Message = UserName + " joined the server!";
