@@ -65,13 +65,10 @@ bool CServer::Initialise() {
 	//Qs 2: Create the map to hold details of all connected clients
 	m_pConnectedClients = new std::map < std::string, TClientDetails >();
 
-	//Starting the server clock
-
 	return true;
 }
 
 bool CServer::AddClient(std::string _strClientName) {
-	//TO DO : Add the code to add a client to the map here...
 
 	for (auto it = m_pConnectedClients->begin(); it != m_pConnectedClients->end(); ++it) {
 		//Check to see that the client to be added does not already exist in the map, 
@@ -130,7 +127,7 @@ bool CServer::SendData(char* _pcDataToSend) {
 		reinterpret_cast<sockaddr*>(&m_ClientAddress),	// address to be filled with packet target
 		sizeof(m_ClientAddress)							// size of the above address struct.
 	);
-//iNumBytes;
+
 	if (_iBytesToSend != iNumBytes) {
 		std::cout << "There was an error in sending data from Server to Client" << std::endl;
 		return false;
@@ -157,6 +154,7 @@ void CServer::ReceiveData(char* _pcBufferToReceiveData) {
 										reinterpret_cast<sockaddr*>(&m_ClientAddress),	// address to be filled with packet source
 										&iSizeOfAdd								// size of the above address struct.
 		);
+
 		if (_iNumOfBytesReceived < 0) {
 			int _iError = WSAGetLastError();
 			if (_iError == WSAECONNRESET) {
@@ -166,7 +164,9 @@ void CServer::ReceiveData(char* _pcBufferToReceiveData) {
 				if (it != m_pConnectedClients->end()) {
 					m_pConnectedClients->erase(it);
 				}
-				
+				else {
+					ErrorRoutines::PrintWSAErrorInfo(_iError);
+				}
 			}
 			//return false;
 		} else {
@@ -180,8 +180,6 @@ void CServer::ReceiveData(char* _pcBufferToReceiveData) {
 			//Push this packet data into the WorkQ
 			m_pWorkQueue->push(_pcBufferToReceiveData);
 		}
-		//std::this_thread::yield();
-
 	} //End of while (true)
 }
 
@@ -227,7 +225,7 @@ void CServer::ProcessData(char* _pcDataReceived) {
 
 			//Add the user to the client list and send the Welcome Message
 			AddClient(_packetRecvd.MessageContent);
-		#pragma region Welcome Message
+			#pragma region Welcome Message
 			//Sending a message to all users that a new client has joined
 			std::cout << "User " << _pcDataReceived << " joined successfully.\n";
 			//Sending a special message to the client that just joined, containing
@@ -330,11 +328,6 @@ void CServer::ProcessData(char* _pcDataReceived) {
 			SendData(_packetToSend.PacketData);
 			break;
 		}
-
-		/*std::cout << "Keep Alive Message recieved.\n";
-		if (_packetRecvd.MessageContent == "Close Connection") {
-			std::cout << "Client Disconnected" << std::endl;
-		}*/
 
 		default:break;
 	}

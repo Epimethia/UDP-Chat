@@ -56,28 +56,6 @@ int main() {
 	//A pointer to hold a server instance
 	CServer* _pServer = nullptr;
 
-	// query, is this to be a client or a server?
-	/*_ucChoice = QueryOption("Do you want to run a client or server (C/S)?", "CS");
-	switch (_ucChoice) {
-		case 'C':
-		{
-			_eNetworkEntityType = CLIENT;
-
-			break;
-		}
-		case 'S':
-		{
-			_eNetworkEntityType = SERVER;
-			break;
-		}
-		default:
-		{
-			std::cout << "This is not a valid option" << std::endl;
-			return 0;
-			break;
-		}
-	}*/
-
 	_eNetworkEntityType = SERVER;
 	if (!_rNetwork.GetInstance().Initialise(_eNetworkEntityType)) {
 		std::cout << "Unable to initialise the Network........Press any key to continue......";
