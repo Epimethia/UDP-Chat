@@ -25,8 +25,8 @@ enum EEntityType
 //constants
 namespace
 {
-	unsigned const DEFAULT_SERVER_PORT = 50023;
-	unsigned const DEFAULT_CLIENT_PORT = 60013;
+	unsigned const DEFAULT_SERVER_PORT = 17832;
+	unsigned const DEFAULT_CLIENT_PORT = 17932;
 	unsigned const MAX_MESSAGE_LENGTH = 256;
 	unsigned const MAX_ADDRESS_LENGTH = 32;
 }

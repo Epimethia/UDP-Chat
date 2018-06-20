@@ -102,8 +102,6 @@ int main() {
 
 	while (_rNetwork.IsOnline()) {
 		if (_eNetworkEntityType == CLIENT) {//if network entity is a client
-			_pClient = static_cast<CClient*>(_rNetwork.GetInstance().GetNetworkEntity());
-
 			//Prepare for reading input from the user
 			_InputBuffer.PrintToScreenTop();
 
@@ -155,7 +153,6 @@ int main() {
 				Clock.Process();
 				Sleep(1);
 				TimeSinceLastCheck += Clock.GetDeltaTick();
-				_pServer->IncrimentTimers(Clock.GetDeltaTick());
 				//If 2 seconds have gone by, perform a keep alive check
 				if (TimeSinceLastCheck >= 10000.0f) {
 					std::cout << "Performing Keep Alive Check\n";
