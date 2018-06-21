@@ -134,8 +134,7 @@ int main() {
 				//Pushing a Keep Alive packet to the server
 				Clock.Process();
 				Sleep(1);
-				TimeSinceLastCheck += Clock.GetDeltaTick();
-				_pServer->IncrimentTimers(Clock.GetDeltaTick());
+				TimeSinceLastCheck++;
 				//If 2 seconds have gone by, perform a keep alive check
 				if (TimeSinceLastCheck >= 10000.0f) {
 					std::cout << "Performing Keep Alive Check\n";

@@ -53,7 +53,6 @@ public:
 	virtual void GetRemoteIPAddress(char* _pcSendersIP);
 	virtual unsigned short GetRemotePort();
 	void KeepAliveCheck();
-	void IncrimentTimers(float TimeDelta);
 
 	CWorkQueue<char*>* GetWorkQueue();
 

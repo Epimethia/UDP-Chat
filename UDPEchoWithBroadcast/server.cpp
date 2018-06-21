@@ -347,9 +347,3 @@ void CServer::KeepAliveCheck() {
 		SendData(KeepAlive.PacketData);
 	}
 }
-
-void CServer::IncrimentTimers(float TimeDelta) {
-	for (auto& it : *m_pConnectedClients) {
-		it.second.m_fTimeSinceLastMessage += TimeDelta;
-	}
-}

@@ -220,7 +220,7 @@ void CClient::ReceiveBroadcastMessages(char* _pcBufferToReceiveData) {
 		if (_iNumOfBytesReceived < 0) {
 			//Error in receiving data 
 			int _iError = WSAGetLastError();
-			//std::cout << "recvfrom failed with error " << _iError;
+			std::cout << "recvfrom failed with error " << _iError;
 			if (_iError == WSAETIMEDOUT) // Socket timed out on Receive
 			{
 				m_bDoBroadcast = false; //Do not broadcast any more
@@ -289,7 +289,9 @@ void CClient::ReceiveData(char* _pcBufferToReceiveData) {
 
 		if (_iNumOfBytesReceived < 0) {
 			//Error in receiving data 
-			std::cout << "recvfrom failed with error " << WSAGetLastError();
+			int error = WSAGetLastError();
+			//std::cout << "recvfrom failed with error " << WSAGetLastError();
+			//ErrorRoutines::PrintWSAErrorInfo(error);
 			//WSACONNECTIONRESET
 			_pcBufferToReceiveData = 0; 
 		} else if (_iNumOfBytesReceived == 0) {
